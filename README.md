@@ -1,6 +1,6 @@
 # Care Journal
 
-A mobile-first React, TypeScript, and Vite prototype based on the CDE5311 Figma design. Includes Home, Prepare, Summary, and a three-step entry form. Entries are saved locally in the browser. Today is centered in the date picker; the next two days are visible but disabled.
+A mobile-first React, TypeScript, and Vite prototype based on the CDE5311 Figma design. Includes Home, Prepare, Summary, and a three-step entry form. Entries are saved locally in the browser. Today is centered in the date picker; the next three days are visible but disabled.
 
 ## Setup and run
 

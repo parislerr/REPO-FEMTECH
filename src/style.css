@@ -6,5 +6,5 @@
 /* Horizontally scrollable date picker; retain the initially centered week. */
 .calendar{overflow-x:auto;overflow-y:hidden;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x pan-y;flex-shrink:0}.calendar::-webkit-scrollbar{display:none}.date-strip{position:relative;left:auto;transform:none;width:max-content}
 /* Keep Today centered at the end of the scrollable history. */
-.date-strip{padding-right:max(0px, calc((min(100vw, 393px) - 58px)/2 - 132px))}
+.date-strip{padding-right:max(0px, calc((min(100vw, 393px) - 58px)/2 - 198px))}
 .date:disabled{cursor:default;opacity:.5}.date:disabled:hover{filter:none}
