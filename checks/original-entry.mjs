@@ -1,0 +1,30 @@
+import {chromium} from '@playwright/test';
+import assert from 'node:assert/strict';
+const browser=await chromium.launch({channel:'chrome',headless:true});
+const page=await browser.newPage({viewport:{width:393,height:852}});
+const entries=[{id:101,date:'1 OCTOBER 2026',pad:'Regular',flow:0,symptoms:[{name:'Cramps',level:2,selected:true}],notes:'First original note\nSecond line.',medications:['Iron supplement']},{id:102,date:'2 OCTOBER 2026',pad:'Night Pad',flow:2,symptoms:[{name:'Fatigue',level:5,selected:true}],notes:'Different entry',medications:['Vitamin D']}];
+await page.addInitScript(data=>localStorage.setItem('care-entries',JSON.stringify(data)),entries);
+await page.goto('http://127.0.0.1:5173');
+await page.getByRole('button',{name:'Summary',exact:true}).click();
+for(const entry of entries){
+ await page.locator(`[data-entry-id="${entry.id}"] img`).click();
+ await page.getByRole('heading',{name:'ORIGINAL ENTRY'}).waitFor();
+ const text=await page.locator('main').innerText();
+ for(const expected of [entry.date,entry.pad,entry.notes,...entry.medications,entry.symptoms[0].name])assert(text.includes(expected));
+ assert(!text.includes(entries.find(e=>e.id!==entry.id).notes));
+ assert.equal(await page.locator('.original-notes').innerText(),entry.notes);
+ await page.getByRole('button',{name:'Back to summary',exact:true}).first().click();
+ await page.getByRole('heading',{name:'SYMPTOM SUMMARY',exact:true}).waitFor();
+}
+assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('care-entries'))),entries);
+await page.locator('[data-entry-id="101"]').click();
+await page.setViewportSize({width:320,height:852});
+assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+await page.screenshot({path:'checks/original-entry.png',fullPage:true});
+const sample=await browser.newPage();await sample.goto('http://127.0.0.1:5173');await sample.getByRole('button',{name:'Summary',exact:true}).click();await sample.locator('.source').first().click();await sample.getByText('This is a sample entry from the design.',{exact:false}).waitFor();
+await sample.getByRole('button',{name:'Back to summary',exact:true}).first().click();
+await sample.getByRole('button',{name:'Home',exact:true}).click();
+await sample.locator('.entry-card').first().click();await sample.getByRole('heading',{name:'ORIGINAL ENTRY'}).waitFor();
+await sample.getByRole('button',{name:'Back to home',exact:true}).first().click();
+await sample.getByRole('heading',{name:'Recent Entries'}).waitFor();
+console.log('PASS: each source opens its own complete entry, back navigation, unchanged saved data, mobile layout and sample state.');await browser.close();
