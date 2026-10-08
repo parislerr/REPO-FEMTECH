@@ -1,0 +1,41 @@
+# Dependencies and build output
+node_modules/
+dist/
+build/
+coverage/
+.vite/
+*.tsbuildinfo
+
+# Local secrets and environment overrides
+.env
+.env.*
+!.env.example
+!.env.*.example
+.npmrc
+.pnpmrc
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+
+# Logs and generated browser reports
+*.log
+playwright-report/
+test-results/
+checks/*.png
+checks/*.jpg
+checks/*.webm
+checks/*.zip
+
+# Temporary Figma exports and download metadata
+design-reference/
+
+# Editor and operating-system files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
